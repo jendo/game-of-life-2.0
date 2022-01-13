@@ -5,6 +5,12 @@ ARG COMPOSER_VERSION=1.10.10
 ARG COMPOSER_SHA256=8f16aa77b1236ed40855d8d141c0a939d108a939c8e73f9f32eadd3f05f181b9
 
 RUN \
+ usermod -u 1000 www-data && \
+ groupmod -g 1000 www-data && \
+ usermod -d /home/www-data -m -s /bin/bash www-data && \
+ chown -R www-data:www-data /home/www-data
+
+RUN \
  apt-get update && \
  apt-get install -y vim git curl zip unzip
 
@@ -21,5 +27,6 @@ RUN pecl install xdebug && \
 ENV DEV=1
 RUN mkdir -p $APP_WORK_DIR
 RUN chmod -R 755 $APP_WORK_DIR
+RUN chown -R www-data:www-data $APP_WORK_DIR
 
 WORKDIR $APP_WORK_DIR
