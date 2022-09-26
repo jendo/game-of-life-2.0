@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use App\Console\GamePlayCommand;
+use Symfony\Component\Console\Application;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+try {
+    $container = App\Bootstrap::boot();
+
+    /** @var Application $consoleApplication */
+    $consoleApplication = $container->getByType(Application::class);
+    $command = $container->getByType(GamePlayCommand::class);
+
+    $consoleApplication->add($command);
+    $consoleApplication->run();
+} catch (Exception $e) {
+    exit($e->getMessage());
+}
