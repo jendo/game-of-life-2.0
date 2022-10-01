@@ -19,8 +19,8 @@ final class GamePlayCommand extends Command
         $this
             ->setName('game:play')
             ->setDescription('Play Game of Life')
-            ->addArgument(self::INPUT_ARG, InputArgument::REQUIRED, 'Input XML file')
-            ->addArgument(self::OUTPUT_ARG, InputArgument::REQUIRED, 'Output XML file');
+            ->addArgument(self::INPUT_ARG, InputArgument::OPTIONAL, 'Input XML file', 'samples/input.xml')
+            ->addArgument(self::OUTPUT_ARG, InputArgument::OPTIONAL, 'Output XML file', 'samples/output.xml');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
