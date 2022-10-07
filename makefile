@@ -6,3 +6,5 @@ composer-install:
 	docker-compose exec php su --command="composer -n install --prefer-dist" www-data
 cs:
 	docker-compose exec php su --command="composer cs" www-data
+stan:
+	docker-compose exec php su --command="composer stan" www-data

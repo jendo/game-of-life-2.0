@@ -15,7 +15,9 @@
     "symfony/console": "^6.0"
   },
   "require-dev": {
-    "squizlabs/php_codesniffer": "^3.7"
+    "squizlabs/php_codesniffer": "^3.7",
+    "phpstan/phpstan-nette": "^1.1",
+    "phpstan/phpstan": "^1.8"
   },
   "autoload": {
     "psr-4": {
@@ -23,7 +25,8 @@
     }
   },
   "scripts": {
-    "cs": "./vendor/bin/phpcs -d memory_limit=512M --parallel=8 --colors --standard=PSR12 --extensions=php --encoding=utf-8 -sp ./app"
+    "cs": "./vendor/bin/phpcs -d memory_limit=512M --parallel=8 --colors --standard=PSR12 --extensions=php --encoding=utf-8 -sp ./app",
+    "stan": "php -d memory_limit=512M ./vendor/bin/phpstan analyze -l max -c phpstan.neon -vvv app/"
   },
   "minimum-stability": "stable"
 }
