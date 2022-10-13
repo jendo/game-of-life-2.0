@@ -3,3 +3,4 @@ parameters:
 services:
 	- Symfony\Component\Console\Application
 	- App\Console\GamePlayCommand
+	- App\Loader\FileLoader
