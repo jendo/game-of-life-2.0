@@ -8,3 +8,5 @@ cs:
 	docker-compose exec php su --command="composer cs" www-data
 stan:
 	docker-compose exec php su --command="composer stan" www-data
+tests:
+	docker-compose exec php su --command="composer tests" www-data
