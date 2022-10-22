@@ -7,6 +7,9 @@ namespace App\Console;
 use App\Loader\FileIsIsNotReadableException;
 use App\Loader\FileLoader;
 use App\Loader\FileNotExistException;
+use App\Parser\FileIsNoParsableException;
+use App\Parser\XmlElementDefinition;
+use App\Parser\XmlParser;
 use InvalidArgumentException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -20,10 +23,13 @@ final class GamePlayCommand extends Command
 
     private FileLoader $fileLoader;
 
-    public function __construct(FileLoader $fileLoader)
+    private XmlParser $xmlParser;
+
+    public function __construct(FileLoader $fileLoader, XmlParser $xmlParser)
     {
         parent::__construct();
         $this->fileLoader = $fileLoader;
+        $this->xmlParser = $xmlParser;
     }
 
     protected function configure(): void
@@ -47,6 +53,28 @@ final class GamePlayCommand extends Command
         try {
             $content = $this->fileLoader->load($inputXml);
         } catch (FileIsIsNotReadableException | FileNotExistException $e) {
+            $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
+            return -1;
+        }
+
+        $this->xmlParser->mapElements(
+            [
+                new XmlElementDefinition('life', XmlElementDefinition::TYPE_KEY_VALUE),
+                new XmlElementDefinition('world', XmlElementDefinition::TYPE_KEY_VALUE),
+                new XmlElementDefinition('organism', XmlElementDefinition::TYPE_KEY_VALUE),
+                new XmlElementDefinition('organisms', XmlElementDefinition::TYPE_WITH_REPEATING_ELEMENTS, 'organism'),
+            ]
+        );
+
+        try {
+            /**
+             * @var array{
+             *     world:array{cells:string, iterations:string},
+             *     organisms:array{array{x_pos:string, y_pos:string}}
+             *     } $data
+             */
+            $data = $this->xmlParser->parse($content);
+        } catch (FileIsNoParsableException $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             return -1;
         }
