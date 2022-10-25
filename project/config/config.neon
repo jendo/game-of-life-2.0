@@ -6,3 +6,5 @@ services:
 	- App\Loader\FileLoader
 	- Sabre\Xml\Service
 	- App\Parser\XmlParser
+	- App\Game\Input\LifeFactory
+	- App\Game\Input\Validation\Validator

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Console;
 
+use App\Game\Input\LifeFactory;
+use App\Game\Input\Validation\InvalidDataException;
 use App\Loader\FileIsIsNotReadableException;
 use App\Loader\FileLoader;
 use App\Loader\FileNotExistException;
@@ -25,11 +27,14 @@ final class GamePlayCommand extends Command
 
     private XmlParser $xmlParser;
 
-    public function __construct(FileLoader $fileLoader, XmlParser $xmlParser)
+    private LifeFactory $lifeFactory;
+
+    public function __construct(FileLoader $fileLoader, XmlParser $xmlParser, LifeFactory $lifeFactory)
     {
         parent::__construct();
         $this->fileLoader = $fileLoader;
         $this->xmlParser = $xmlParser;
+        $this->lifeFactory = $lifeFactory;
     }
 
     protected function configure(): void
@@ -76,6 +81,13 @@ final class GamePlayCommand extends Command
             $data = $this->xmlParser->parse($content);
         } catch (FileIsNoParsableException $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
+            return -1;
+        }
+
+        try {
+            $life = $this->lifeFactory->create($data);
+        } catch (InvalidDataException $e) {
+            $output->writeln(sprintf('<error>%s</error>', $e->getPrintableMessage()));
             return -1;
         }
 
