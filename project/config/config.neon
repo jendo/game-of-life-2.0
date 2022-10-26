@@ -8,3 +8,4 @@ services:
 	- App\Parser\XmlParser
 	- App\Game\Input\LifeFactory
 	- App\Game\Input\Validation\Validator
+	- App\Game\Environment\WorldEvolution

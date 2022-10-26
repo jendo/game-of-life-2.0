@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console;
 
+use App\Game\Environment\WorldEvolution;
 use App\Game\Input\LifeFactory;
 use App\Game\Input\Validation\InvalidDataException;
 use App\Loader\FileIsIsNotReadableException;
@@ -29,12 +30,19 @@ final class GamePlayCommand extends Command
 
     private LifeFactory $lifeFactory;
 
-    public function __construct(FileLoader $fileLoader, XmlParser $xmlParser, LifeFactory $lifeFactory)
-    {
+    private WorldEvolution $worldEvolution;
+
+    public function __construct(
+        FileLoader $fileLoader,
+        XmlParser $xmlParser,
+        LifeFactory $lifeFactory,
+        WorldEvolution $worldEvolution
+    ) {
         parent::__construct();
         $this->fileLoader = $fileLoader;
         $this->xmlParser = $xmlParser;
         $this->lifeFactory = $lifeFactory;
+        $this->worldEvolution = $worldEvolution;
     }
 
     protected function configure(): void
@@ -90,6 +98,8 @@ final class GamePlayCommand extends Command
             $output->writeln(sprintf('<error>%s</error>', $e->getPrintableMessage()));
             return -1;
         }
+
+        $wordStates = $this->worldEvolution->start($life);
 
         return 0;
     }
