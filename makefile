@@ -10,3 +10,5 @@ stan:
 	docker-compose exec php su --command="composer stan" www-data
 tests:
 	docker-compose exec php su --command="composer tests" www-data
+play:
+	docker-compose exec php su --command="bin/console game:play $(input)" www-data
