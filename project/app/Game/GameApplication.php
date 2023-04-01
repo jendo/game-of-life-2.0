@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Game;
 
 use App\File\FileIsIsNotReadableException;
-use App\File\FileLoader;
+use App\File\Loader;
 use App\File\FileNotExistException;
 use App\Game\Environment\WorldEvolution;
 use App\Game\Environment\WorldState;
@@ -16,7 +16,7 @@ use App\Parser\XmlParser;
 
 class GameApplication
 {
-    private FileLoader $fileLoader;
+    private Loader $fileLoader;
 
     private XmlParser $xmlParser;
 
@@ -25,7 +25,7 @@ class GameApplication
     private WorldEvolution $worldEvolution;
 
     public function __construct(
-        FileLoader $fileLoader,
+        Loader $fileLoader,
         XmlParser $xmlParser,
         LifeFactory $lifeFactory,
         WorldEvolution $worldEvolution
