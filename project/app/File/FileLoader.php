@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Loader;
+namespace App\File;
 
 class FileLoader
 {

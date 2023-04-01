@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Game;
 
+use App\File\FileIsIsNotReadableException;
+use App\File\FileLoader;
+use App\File\FileNotExistException;
 use App\Game\Environment\WorldEvolution;
 use App\Game\Environment\WorldState;
 use App\Game\Input\LifeFactory;
 use App\Game\Input\Validation\InvalidDataException;
-use App\Loader\FileIsIsNotReadableException;
-use App\Loader\FileLoader;
-use App\Loader\FileNotExistException;
 use App\Parser\XmlElementDefinition;
 use App\Parser\XmlParser;
 

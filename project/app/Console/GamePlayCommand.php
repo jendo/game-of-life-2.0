@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Console;
 
+use App\File\FileIsIsNotReadableException;
+use App\File\FileNotExistException;
 use App\Game\GameApplication;
 use App\Game\Input\Validation\InvalidDataException;
 use App\Game\Output\WorldStateFormatter;
-use App\Loader\FileIsIsNotReadableException;
-use App\Loader\FileNotExistException;
 use App\Parser\FileIsNoParsableException;
 use InvalidArgumentException;
 use Symfony\Component\Console\Command\Command;

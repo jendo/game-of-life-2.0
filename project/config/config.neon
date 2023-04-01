@@ -3,7 +3,7 @@ parameters:
 services:
 	- Symfony\Component\Console\Application
 	- App\Console\GamePlayCommand
-	- App\Loader\FileLoader
+	- App\File\FileLoader
 	- Sabre\Xml\Service
 	- App\Parser\XmlParser
 	- App\Game\Input\LifeFactory

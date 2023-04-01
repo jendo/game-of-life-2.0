@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace AppTest\Unit\Loader;
+namespace AppTest\Unit\File;
 
-use App\Loader\FileIsIsNotReadableException;
-use App\Loader\FileLoader;
-use App\Loader\FileNotExistException;
+use App\File\FileIsIsNotReadableException;
+use App\File\FileLoader;
+use App\File\FileNotExistException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
