@@ -52,14 +52,14 @@ final class GamePlayCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
-            $inputXml = $this->getInputXml($input);
+            [$inputXml, $outputXml] = $this->getInputOutputXml($input);
         } catch (InvalidArgumentException $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             return -1;
         }
 
         try {
-            $wordStates = $this->gameApplication->run($inputXml);
+            $wordStates = $this->gameApplication->run($inputXml, $outputXml);
         } catch (FileIsIsNotReadableException | FileNotExistException | FileIsNoParsableException $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             return -1;
@@ -80,9 +80,9 @@ final class GamePlayCommand extends Command
 
     /**
      * @param InputInterface $input
-     * @return string
+     * @return string[] First element is input xml filename and second element is output xml filename
      */
-    private function getInputXml(InputInterface $input): string
+    private function getInputOutputXml(InputInterface $input): array
     {
         $inputXml = $input->getArgument(self::INPUT_ARG);
         if (is_string($inputXml) === false) {
@@ -91,9 +91,15 @@ final class GamePlayCommand extends Command
             );
         }
 
-        return $inputXml;
-    }
+        $outputXml = $input->getArgument(self::OUTPUT_ARG);
+        if (is_string($outputXml) === false) {
+            throw new InvalidArgumentException(
+                sprintf('Argument for output xml file must be string. Type %s provided', gettype($outputXml))
+            );
+        }
 
+        return [$inputXml, $outputXml];
+    }
 
     /**
      * @param OutputInterface $output

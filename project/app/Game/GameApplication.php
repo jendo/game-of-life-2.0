@@ -38,12 +38,13 @@ class GameApplication
 
     /**
      * @param string $inputXml
+     * @param string $outputXml
      * @return WorldState[]
      * @throws FileIsIsNotReadableException
      * @throws FileNotExistException
      * @throws InvalidDataException
      */
-    public function run(string $inputXml): array
+    public function run(string $inputXml, string $outputXml): array
     {
         $content = $this->fileLoader->load($inputXml);
 
