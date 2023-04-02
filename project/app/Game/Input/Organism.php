@@ -6,6 +6,7 @@ namespace App\Game\Input;
 
 class Organism
 {
+    public const NAME = 'organism';
     public const FIELD_POSITION_X = 'x_pos';
     public const FIELD_POSITION_Y = 'y_pos';
 

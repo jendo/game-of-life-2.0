@@ -4,12 +4,14 @@ services:
 	- Symfony\Component\Console\Application
 	- App\Console\GamePlayCommand
 	- App\File\Loader
+	- App\File\Writer
 	- Sabre\Xml\Service
 	- App\Parser\XmlParser
 	- App\Game\Input\LifeFactory
 	- App\Game\Input\Validation\Validator
 	- App\Game\Environment\WorldEvolution
 	- App\Game\Output\WorldStateFormatter
+	- App\Game\Output\XmlOutputProvider
 	input: Symfony\Component\Console\Input\ArgvInput
 	output: Symfony\Component\Console\Output\ConsoleOutput
 	- Symfony\Component\Console\Style\SymfonyStyle(@input, @output)

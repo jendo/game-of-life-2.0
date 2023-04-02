@@ -6,6 +6,7 @@ namespace App\Game\Input;
 
 class Life
 {
+    public const NAME = 'life';
     public const FIELD_WORLD = 'world';
     public const FIELD_ORGANISMS = 'organisms';
 

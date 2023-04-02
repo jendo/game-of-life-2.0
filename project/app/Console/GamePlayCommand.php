@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console;
 
 use App\File\FileIsIsNotReadableException;
+use App\File\FileIsIsNotWritableException;
 use App\File\FileNotExistException;
 use App\Game\GameApplication;
 use App\Game\Input\Validation\InvalidDataException;
@@ -16,6 +17,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Throwable;
 
 final class GamePlayCommand extends Command
 {
@@ -60,11 +62,12 @@ final class GamePlayCommand extends Command
 
         try {
             $wordStates = $this->gameApplication->run($inputXml, $outputXml);
-        } catch (FileIsIsNotReadableException | FileNotExistException | FileIsNoParsableException $e) {
-            $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
-            return -1;
-        } catch (InvalidDataException $e) {
-            $output->writeln(sprintf('<error>%s</error>', $e->getPrintableMessage()));
+        } catch (Throwable $e) {
+            if ($e instanceof InvalidDataException) {
+                $output->writeln(sprintf('<error>%s</error>', $e->getPrintableMessage()));
+            } else {
+                $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
+            }
             return -1;
         }
 

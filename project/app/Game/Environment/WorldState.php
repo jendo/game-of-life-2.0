@@ -19,6 +19,11 @@ class WorldState
     private array $cells;
 
     /**
+     * @var Cell[] Flat list of living cells
+     */
+    private ?array $livingCellList = null;
+
+    /**
      * @param int $worldSize
      * @param int $iterations
      * @param Cell[][] $cells List of Cells indexed by its positions
@@ -50,6 +55,35 @@ class WorldState
         }
 
         return $this->cells[$x][$y];
+    }
+
+    /**
+     * Get flat list of cells
+     * @return Cell[]
+     */
+    public function getLivingCellList(): array
+    {
+        if ($this->livingCellList !== null) {
+            return $this->livingCellList;
+        }
+
+        $cells = [];
+        for ($x = 0; $x < $this->getWorldSize(); $x++) {
+            for ($y = 0; $y < $this->getWorldSize(); $y++) {
+                if (isset($this->cells[$x][$y]) === false) {
+                    continue;
+                }
+
+                $cell = $this->cells[$x][$y];
+                if ($cell->isAlive() === true) {
+                    $cells[] = $cell;
+                }
+            }
+        }
+
+        $this->livingCellList = $cells;
+
+        return $this->livingCellList;
     }
 
     public static function createFromLife(Life $life): self
