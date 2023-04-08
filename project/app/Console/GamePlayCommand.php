@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console;
 
+use InvalidArgumentException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,6 +26,37 @@ final class GamePlayCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        try {
+            [$inputXmlFile, $outputXmlFile] = $this->getInputOutputXmlFiles($input);
+        } catch (InvalidArgumentException $e) {
+            $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
+
+            return -1;
+        }
+
         return 0;
+    }
+
+    /**
+     * @param InputInterface $input
+     * @return string[] First element is input xml filename and second element is output xml filename
+     */
+    private function getInputOutputXmlFiles(InputInterface $input): array
+    {
+        $inputXml = $input->getArgument(self::INPUT_ARG);
+        if (is_string($inputXml) === false) {
+            throw new InvalidArgumentException(
+                sprintf('Argument for input xml file must be string. Type %s provided', gettype($inputXml))
+            );
+        }
+
+        $outputXml = $input->getArgument(self::OUTPUT_ARG);
+        if (is_string($outputXml) === false) {
+            throw new InvalidArgumentException(
+                sprintf('Argument for output xml file must be string. Type %s provided', gettype($outputXml))
+            );
+        }
+
+        return [$inputXml, $outputXml];
     }
 }
