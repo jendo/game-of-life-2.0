@@ -6,3 +6,4 @@ services:
 	- App\File\Loader
 	- Sabre\Xml\Service
 	- App\Xml\Parser\Parser
+	- App\GameOfLife\DTO\LifeFactory
