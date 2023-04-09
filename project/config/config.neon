@@ -4,3 +4,5 @@ services:
 	- Symfony\Component\Console\Application
 	- App\Console\GamePlayCommand
 	- App\File\Loader
+	- Sabre\Xml\Service
+	- App\Xml\Parser\Parser

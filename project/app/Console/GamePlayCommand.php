@@ -7,6 +7,9 @@ namespace App\Console;
 use App\File\FileIsNotReadableException;
 use App\File\FileNotExistException;
 use App\File\Loader;
+use App\Xml\Parser\ElementDefinition;
+use App\Xml\Parser\FileIsNoParsableException;
+use App\Xml\Parser\Parser;
 use InvalidArgumentException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -20,10 +23,13 @@ final class GamePlayCommand extends Command
 
     private Loader $fileLoader;
 
-    public function __construct(Loader $fileLoader)
+    private Parser $xmlParser;
+
+    public function __construct(Loader $fileLoader, Parser $xmlParser)
     {
         parent::__construct();
         $this->fileLoader = $fileLoader;
+        $this->xmlParser = $xmlParser;
     }
 
     protected function configure(): void
@@ -31,8 +37,8 @@ final class GamePlayCommand extends Command
         $this
             ->setName('game:play')
             ->setDescription('Play Game of Life')
-            ->addArgument(self::INPUT_ARG, InputArgument::OPTIONAL, 'Input XML file', 'samples/input.xml')
-            ->addArgument(self::OUTPUT_ARG, InputArgument::OPTIONAL, 'Output XML file', 'samples/output.xml');
+            ->addArgument(self::INPUT_ARG, InputArgument::OPTIONAL, 'Input Xml file', 'samples/input.xml')
+            ->addArgument(self::OUTPUT_ARG, InputArgument::OPTIONAL, 'Output Xml file', 'samples/output.xml');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -48,6 +54,28 @@ final class GamePlayCommand extends Command
         try {
             $content = $this->fileLoader->load($inputXmlFile);
         } catch (FileIsNotReadableException | FileNotExistException $e) {
+            $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
+            return -1;
+        }
+
+        $this->xmlParser->mapElements(
+            [
+                new ElementDefinition('life', ElementDefinition::TYPE_KEY_VALUE),
+                new ElementDefinition('world', ElementDefinition::TYPE_KEY_VALUE),
+                new ElementDefinition('organism', ElementDefinition::TYPE_KEY_VALUE),
+                new ElementDefinition('organisms', ElementDefinition::TYPE_WITH_REPEATING_ELEMENTS, 'organism'),
+            ]
+        );
+
+        try {
+            /**
+             * @var array{
+             *     world:array{cells:string, iterations:string},
+             *     organisms:array{array{x_pos:string, y_pos:string}}
+             *     } $data
+             */
+            $data = $this->xmlParser->parse($content);
+        } catch (FileIsNoParsableException $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             return -1;
         }
