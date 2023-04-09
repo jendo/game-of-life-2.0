@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Console;
 
+use App\File\FileIsNotReadableException;
+use App\File\FileNotExistException;
+use App\File\Loader;
 use InvalidArgumentException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -14,6 +17,14 @@ final class GamePlayCommand extends Command
 {
     private const INPUT_ARG = 'i';
     private const OUTPUT_ARG = 'o';
+
+    private Loader $fileLoader;
+
+    public function __construct(Loader $fileLoader)
+    {
+        parent::__construct();
+        $this->fileLoader = $fileLoader;
+    }
 
     protected function configure(): void
     {
@@ -31,6 +42,13 @@ final class GamePlayCommand extends Command
         } catch (InvalidArgumentException $e) {
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
 
+            return -1;
+        }
+
+        try {
+            $content = $this->fileLoader->load($inputXmlFile);
+        } catch (FileIsNotReadableException | FileNotExistException $e) {
+            $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             return -1;
         }
 
