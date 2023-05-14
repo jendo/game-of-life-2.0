@@ -10,3 +10,8 @@ stan:
 	docker-compose exec php su --command="composer stan" www-data
 tests:
 	docker-compose exec php su --command="composer tests" www-data
+
+APP_NAME = $(shell docker ps -q -f name=php)
+
+bash:
+	docker exec -it --user www-data $(APP_NAME) bash

@@ -35,7 +35,7 @@
   "scripts": {
     "cs": "./vendor/bin/phpcs -d memory_limit=512M --parallel=8 --colors --standard=PSR12 --extensions=php --encoding=utf-8 -sp ./app",
     "stan": "php -d memory_limit=512M ./vendor/bin/phpstan analyze -l max -c phpstan.neon -vvv app/",
-    "tests": "phpunit -d memory_limit=512M"
+    "tests": "vendor/bin/phpunit -d memory_limit=512M --configuration /project/phpunit.xml.dist"
   },
   "minimum-stability": "stable"
 }
