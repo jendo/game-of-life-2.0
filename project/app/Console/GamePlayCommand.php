@@ -7,6 +7,7 @@ namespace App\Console;
 use App\File\FileIsNotReadableException;
 use App\File\FileNotExistException;
 use App\File\Loader;
+use App\GameOfLife\Application;
 use App\GameOfLife\DTO\LifeFactory;
 use App\Xml\Parser\ElementDefinition;
 use App\Xml\Parser\FileIsNoParsableException;
@@ -28,12 +29,19 @@ final class GamePlayCommand extends Command
 
     private LifeFactory $lifeFactory;
 
-    public function __construct(Loader $fileLoader, Parser $xmlParser, LifeFactory $lifeFactory)
-    {
+    private Application $gameOfLifeApplication;
+
+    public function __construct(
+        Loader $fileLoader,
+        Parser $xmlParser,
+        LifeFactory $lifeFactory,
+        Application $application
+    ) {
         parent::__construct();
         $this->fileLoader = $fileLoader;
         $this->xmlParser = $xmlParser;
         $this->lifeFactory = $lifeFactory;
+        $this->gameOfLifeApplication = $application;
     }
 
     protected function configure(): void
@@ -85,6 +93,8 @@ final class GamePlayCommand extends Command
         }
 
         $life = $this->lifeFactory->create($data);
+
+        $worldStates =  $this->gameOfLifeApplication->run($life);
 
         return 0;
     }
